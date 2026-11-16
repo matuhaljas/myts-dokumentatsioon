@@ -1,101 +1,182 @@
 # Projekti dokumentatsioon
 
+> **Seis:** planeerimisjärgus. Riistvara on olemas, ühendused ja ehitussammud on paika pandud, kuid seadet pole veel kokku pandud ega testitud. Programmikood lisatakse hiljem.
+
 ## 1. Projekti eesmärk ja seadme lühikirjeldus
-**Mis asi see on, mida ja miks me teeme? Millist praktilist probleemi see lahendab?**
 
-Näide stiilist:
-- Meie projekti eesmärk on luua ventilaator, mida saab juhtida infrapuna puldiga.
-- Seadet saab kasutada näiteks ruumi jahutamiseks olukorras, kus käega lülitile ulatamine on ebamugav.
-- Peamised komponendid: elektrimootor, servo, ventilaatori labad (3D prinditud), Arduino mikrokontroller.
-
-👉 _Asenda see kirjeldus enda seadme kirjeldusega._
+- Meie projekti eesmärk on luua ultraheliradar, mis pöörab kaugusandurit servo abil ja joonistab ümbruse kaardi arvutiekraanile.
+- Seade näitab, mis suunas ja kui kaugel on anduri ees olevad esemed. Seda saab kasutada näiteks ruumi või laua ümbruse kaardistamiseks ja liikuvate esemete jälgimiseks.
+- Iga mõõtmise kohta saadetakse arvutisse nurk ja kaugus ning neist tekib poolringikujuline radaripilt, kus esemed paistavad täppidena.
+- Peamised komponendid: Arduino UNO R4 WiFi, TinkerKit sensorkilp, HC-SR04 ultraheli-kaugusandur, servo Hitec HS-322HD.
 
 ---
 
 ## 2. Sisendite loetelu
-**Millised on süsteemi poolt loetavad / mõõdetavad sisendid? Millega neid mõõdetakse / tuvastatakse?**
 
-Kirjelda kõik sisendid eraldi punktidena.  
-Näited (asenda enda projektiga):
-
-- Nupp "vasakule" puldil → IR-sensor loeb signaali
-- Nupp "paremale" puldil → IR-sensor loeb signaali
-- Nupp "+" puldil → IR-sensor loeb signaali (tõsta kiirust)
-- Nupp "-" puldil → IR-sensor loeb signaali (vähenda kiirust)
-- ON/OFF nupp → IR-sensor loeb signaali
-
-👉 _Kui sinu süsteem kasutab muid sensoreid (ultraheli, temperatuuriandur, valgusandur, joystick, BLE telefonis vms), kirjelda need siin koos füüsilise sisendi allikaga._
+- Kaugus anduri ees oleva esemeni → HC-SR04 ultraheli-kaugusandur mõõdab 40 kHz helipiiksu kaja aega (mõõteulatus umbes 2–400 cm).
+- Anduri suund → eraldi andurit ei ole; nurk on teada sellest, kuhu programm servo parajasti keeras.
 
 ---
 
 ## 3. Väljundite loetelu
-**Mida süsteem teeb / muudab? Millega väljund realiseeritakse?**
 
-Näited (asenda enda projektiga):
-- Ventilaator pöörleb kiiremini / aeglasemalt → DC mootor
-- Ventilaator suunab õhu vasakule / paremale → servo
-- LED süttib / kustub → LED
-- Ekraanile kuvatakse temperatuur → OLED ekraan
+- Andur pöördub vasakule / paremale → servo Hitec HS-322HD.
+- Mõõtetulemus liigub arvutisse → USB jadaport, iga mõõtmise kohta rida kujul `nurk,kaugus_cm`.
+- Ekraanile kuvatakse radaripilt → arvuti brauser (Chrome või Edge), mis loeb jadaporti ja joonistab punktid.
 
 ---
 
 ## 4. Nõuded loodavale seadmele
-**Mis peab toimuma, kui kasutaja teeb mingi toimingu? Kirjelda käitumisloogika.**
 
-Kirjuta reeglid kujul "Kui X, siis Y".  
-Näited (kohanda enda projektile):
+Reeglid kirjeldavad kavandatud käitumist ja täpsustuvad testimise käigus.
 
-- Kui vajutatakse ON/OFF nuppu, siis:
-  - kui ventilaator on väljas → ventilaator lülitub sisse keskmise kiirusega;
-  - kui ventilaator töötab → ventilaator pöördub keskasendisse ja lülitub välja.
-
-- Kui vajutatakse vasak/noole nuppu, liigub ventilaatori pea iga vajutusega X kraadi vasakule, kuni vasak piir on käes. Kui piir käes, siis rohkem ei liigu.
-
-- Kui ventilaator töötab maksimumkiirusel ja vajutatakse "+" → kiirus ei suurene enam.
-
-👉 _Pane siia KÕIK kokkulepitud reeglid. Need reeglid on alus, mille järgi hiljem hinnatakse, kas teie lahendus vastab eesmärgile._
+- Kui seade saab toite, siis hakkab servo andurit pöörama vahemikus 15°–165° sammuga 2°.
+- Kui servo on jõudnud uude asendisse, siis mõõdab andur kauguse ja Arduino saadab arvutisse rea `nurk,kaugus_cm`.
+- Kui kaja ei tule 25 ms jooksul tagasi (ese on kaugemal kui umbes 4 m või ei peegelda heli), siis saadetakse kauguseks 0 ja radaripildile punkti ei joonistata.
+- Kui servo jõuab vahemiku piirini (15° või 165°), siis muutub pöörlemissuund vastupidiseks.
+- Kui arvuti saab uue mõõtmise, siis joonistatakse radaripildile punkt vastava nurga ja kauguse kohale ning pühkimisjoon liigub samale nurgale.
+- Kui ese on kaugemal kui radaripildi ulatus (200 cm), siis punkti ei kuvata.
+- Kui punkti pole 6 sekundi jooksul uuendatud, siis see kustub.
+- Kui ühendus Arduinoga katkeb, siis kuvab radarivaade vastava teate.
 
 ---
 
 ## 5. Süsteemi füüsiliste komponentide loetelu
-**Millest seade koosneb? Lisa lingid või täpsed nimed, et keegi teine saaks sama asja uuesti osta / teha.**
 
-Tabelina või punktidena. Nt:
+| Komponent | Märkus |
+|---|---|
+| Arduino UNO R4 WiFi (ühilduv kloon, USB-C) | mikrokontroller, juhib andurit ja servot |
+| TinkerKit sensorkilp | toob viigud 3-viiguliste pesadena välja |
+| HC-SR04 ultraheli-kaugusandur | mõõteulatus umbes 2–400 cm |
+| Servo Hitec HS-322HD | pöörab andurit |
+| Juhtmed | 4 tk andurile |
+| USB-C andmekaabel | toide ja andmeside arvutiga |
+| Teip, kuumliim või kummipael | anduri kinnitamiseks servo hoovale |
+| Arvuti (Arduino IDE, Chrome või Edge) | koodi laadimine ja radarivaade |
 
-- Arduino Uno (mikrokontroller)
-- IR-vastuvõtja + pult (tüüp: XY123)  
-- Väike elektrimootor (DC, ___ V)
-- Mootoridraiver (L298N vms)
-- Servo (mudel: SG90 / MG90S / muu)
-- 3D-prinditud ventilaatori labad (STL-failid lisage kataloogi `hardware/`)
-- Toiteallikas (___ V / ___ A)
+Varuks: 4×AA patareihoidik servo eraldi toiteks, kui USB toitest ei piisa.
 
-👉 _Kui ise tegite 3D mudeli, lisage STL või Fusion faili `hardware/` alla. Kui kasutasite netist leitud mudelit, märkige allikas._
+Täpsem loetelu on failis [`hardware/komponentide-loetelu.md`](../hardware/komponentide-loetelu.md).
 
 ---
 
 ## 6. Ühendusskeem
-**Kuidas kõik osad on omavahel ühendatud?**
 
-- Lisa siia pilt või skeemi kirjeldus.
-- Fail `hardware/wiring-diagram.png` peab näitama vähemalt:
-  - milline pin Arduinol läheb millise komponendi sisendisse,
-  - kuidas on toide ühendatud.
+Skeemi pilt (`hardware/wiring-diagram.png`) on veel tegemata. Ühendused tekstina:
 
-Kui skeemi pole veel joonistatud, siis vähemalt kirjelda tekstina, nt:
+| Osa | Sensorkilbi pesa | Arduino viik |
+|---|---|---|
+| Servo signaal | O3 | D6 |
+| HC-SR04 Trig | O2 (signaaliviik) | D9 |
+| HC-SR04 Echo | O1 (signaaliviik) | D10 |
+| HC-SR04 VCC | O2 või O1 (5V viik) | 5V |
+| HC-SR04 GND | O2 või O1 (GND viik) | GND |
 
-- IR-sensor OUT → Arduino digipin 7  
-- Servo signaal → Arduino digipin 6  
-- Mootoridraiveri IN1 → Arduino digipin 2  
-- Mootoridraiveri IN2 → Arduino digipin 3  
-- Mootoridraiveri ENA → Arduino pin 5 (PWM)  
-- GND kõik ühises massis
+- Sensorkilbi oranžid pesad on väljundid O0–O5, valged sisendid I0–I5.
+- Väljundpesade vastavus Arduino viikudele: O0 = D11, O1 = D10, O2 = D9, O3 = D6, O4 = D5, O5 = D3. Sisendid I0–I5 vastavad viikudele A0–A5.
+- Kilbil on ka mustad läbivad pesad, nii et anduri neli juhet võib ühendada ka otse viikudesse 5V, GND, D9 ja D10.
+- Toide tuleb USB kaudu arvutist; servo ja andur saavad 5 V sensorkilbi pesadest. GND on kõigil ühine.
 
-👉 _Skeem peab lõpuks olemas olema, mitte ainult tekst._
+**Kontrollida enne toite ühendamist:** 3-viigulise pesa viikude järjekord (signaal, 5V, GND) tuleb multimeetriga või kilbi tagaküljelt üle vaadata. Servo pistik läheb pessa mõlemat pidi ja anduri vale toitepolaarsus võib selle rikkuda.
+
+**Servo toide:** HS-322HD võtab liikudes paarsada mA ja kinni jäädes kuni umbes 0,8 A. Kui plaat USB toitel taaskäivitub või servo tõmbleb, tuleb servole anda eraldi toide patareidest (4×AA) ja ühendada patareide miinus Arduino GND-ga.
 
 ---
 
 ## 7. Süsteemi juhtiv kood (või pseudokood)
-**Kirjelda programmi loogikat nii, et seda on võimalik aru saada ka hiljem.**  
-Kui kood töötab, pane siia lühike selgitus + viide failile `src/projektinimi.ino`.  
-Kui kood pole veel valmis, lisa siia pseudokood.
+
+Kood pole veel reposse lisatud. Kavandatud loogika pseudokoodina:
+
+```
+seadistus:
+    ava jadaport kiirusel 115200
+    määra Trig väljundiks ja Echo sisendiks
+    ühenda servo viiguga D6
+
+mõõda_kaugus:
+    saada Trig viigule 10 mikrosekundi pikkune impulss
+    mõõda, kui kaua on Echo viik kõrge (kuni 25 ms)
+    kaugus_cm = kestus / 58
+    kui kaja ei tulnud, siis kaugus_cm = 0
+
+skaneeri(nurk):
+    keera servo nurga alla
+    oota 40 ms (servo jõuab kohale, eelmine kaja sumbub)
+    saada jadaporti "nurk,kaugus_cm"
+
+põhitsükkel:
+    iga nurga kohta 15°-st 165°-ni sammuga 2°: skaneeri(nurk)
+    iga nurga kohta 165°-st 15°-ni sammuga 2°: skaneeri(nurk)
+```
+
+Arvutipoolne radarivaade:
+
+```
+loe jadapordist ridu kujul "nurk,kaugus_cm"
+jäta meelde iga nurga viimane kaugus ja mõõtmise aeg
+joonista pidevalt:
+    poolringikujuline võrgustik (kaared iga 50 cm järel, kiired iga 30° järel)
+    punkt iga nurga kohta, mille kaugus on vahemikus 1–200 cm
+    punkt muutub läbipaistvamaks ja kustub 6 sekundiga
+    pühkimisjoon viimati mõõdetud nurga suunas
+```
+
+Heli läbib 1 cm edasi-tagasi umbes 58 mikrosekundiga, sellest tuleb kauguse arvutamise jagaja.
+
+---
+
+## 8. Ehitussammud
+
+1. Paigalda Arduino IDE ja lisa Boards Manageris "Arduino UNO R4 Boards". Vali plaadiks "Arduino UNO R4 WiFi".
+2. Pane sensorkilp Arduino peale.
+3. Kontrolli pesade viigujärjekorda ja ühenda andur ning servo tabeli järgi (USB lahti).
+4. Laadi kood plaadile. Servo peab hakkama edasi-tagasi pühkima.
+5. Ava Serial Monitor kiirusel 115200. Read `nurk,kaugus` peavad muutuma, kui käsi anduri ette panna.
+6. Sulge Serial Monitor, muidu jääb port hõivatuks.
+7. Kinnita andur servo hoovale nii, et saatja ja vastuvõtja vaatavad horisontaalselt ette. Kinnita servo alusele.
+8. Ava radarivaade brauseris ja ühenda Arduino pordiga.
+9. Testi kõva sileda esemega 30–100 cm kaugusel.
+
+Hinnanguline ehitusaeg on 2–3 tundi.
+
+---
+
+## 9. Piirangud
+
+- **Ainult otsenähtavus.** Ultraheli ei läbi seinu ega muid takistusi.
+- **Lai vihk (umbes 15°).** Peenike ese paistab pildil laia kaarena.
+- **Pehmed ja viltused pinnad** (riie, kardin, nurga all sein) peegeldavad halvasti ja võivad jääda nägemata.
+- **Aeglane.** Üks täispühkimine võtab mõne sekundi.
+
+---
+
+## 10. Veaotsing
+
+| Sümptom | Tõenäoline põhjus |
+|---|---|
+| Kaugus on alati 0 | Trig ja Echo on vahetuses või anduri toide puudub |
+| Servo tõmbleb või plaat taaskäivitub | servo vajab eraldi toidet |
+| Radarivaade ei leia porti | Serial Monitor on lahti või brauser pole Chrome/Edge |
+| Pilt on peegelpildis | andur on servol tagurpidi |
+| Täpid hüplevad | pind peegeldab heli halvasti |
+| Arvuti ei näe plaati | USB-C kaabel on ainult laadimiseks |
+
+---
+
+## 11. Kaalutud ja kõrvale jäetud variandid
+
+- **Läbi seina nägev radar.** Olemasolevate osadega pole võimalik: ultraheli ja infrapuna seina ei läbi. WiFi-signaali kõikumise järgi saaks tuvastada ainult seda, et keegi seina taga liigub, ilma kauguse ja suunata. Päris radariks oleks vaja eraldi moodulit (nt HLK-LD2410), mis läbib vaid õhukest seina.
+- **Pilt 2,8" TFT-ekraanil.** Jäi välja kahel põhjusel: Elegoo TFT teegid ja MCUFRIEND_kbv ei toeta UNO R4 WiFi-t ning sensorkilbi püstised pistikud ei mahu ekraanikilbi alla. UNO R3-ga oleks see teostatav (TFT kasutab viike D2–D9 ja A0–A4, radarile jääksid D10, D11 ja A5).
+
+---
+
+## 12. Tegemata
+
+- [ ] Sensorkilbi pesade viigujärjekorra kontroll
+- [ ] Seadme kokkupanek
+- [ ] Koodi kompileerimine ja testimine riistvaraga
+- [ ] Servo toite katsetamine USB pealt
+- [ ] Anduri kinnitus ja korpus
+- [ ] Ühendusskeemi pilt `hardware/wiring-diagram.png`
+- [ ] Programmikoodi lisamine kataloogi `src/`
+- [ ] Pildid ja videod kataloogi `media/`

@@ -1,5 +1,16 @@
 # Robootika iseseisev arendusprojekt
 
+## Projekt Müts: ultraheliradar
+
+Arduino-põhine radar, mis pöörab ultraheli-kaugusandurit servo abil ja joonistab ümbruse kaardi arvutiekraanile. Esemed paistavad poolringikujulisel radaripildil täppidena õiges suunas ja õigel kaugusel.
+
+- **Riistvara:** Arduino UNO R4 WiFi, TinkerKit sensorkilp, HC-SR04 ultraheli-kaugusandur, servo Hitec HS-322HD.
+- **Seis:** planeerimisjärgus. Ühendused ja ehitussammud on paika pandud, seade on kokku panemata ja kood lisamata.
+- **Dokumentatsioon:** [`docs/PROJEKTIDOKUMENTATSIOON.md`](docs/PROJEKTIDOKUMENTATSIOON.md)
+- **Komponendid:** [`hardware/komponentide-loetelu.md`](hardware/komponentide-loetelu.md)
+
+---
+
 See repositoorium on mõeldud IFI6203.DT kursuse "Robootika" üliõpilastele.  
 Iga meeskond **forkib** selle repo ja dokumenteerib siin oma seadme/projekti:
 - *mis probleemi lahendate ja miks see seade kasulik on;*
@@ -26,7 +37,7 @@ Iga meeskond **forkib** selle repo ja dokumenteerib siin oma seadme/projekti:
 ## Meeskond
 
 - Õppeaine: IFI6203.DT Robootika  
-- Autor(id): _[täida nimed siia]_  
-- Aasta / semester: _[nt 2025 kevad]_  
+- Autor(id): Samuel Beekmann, Marcus Haljasoks ja Kevin Saluste  
+- Aasta / semester: 2026 sügis  
 
 > NB! Ärge kustutage osi, mis on nõutud, küll aga võite lisada lisafaile (katsetused, logid, alternatiivsed skeemid jne).

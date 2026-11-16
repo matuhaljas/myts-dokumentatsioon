@@ -1,20 +1,26 @@
 # Komponentide loetelu
 
-Täida oma projekti järgi. Eesmärk on, et järgmine tudeng saaks sama asja uuesti ehitada.
+Eesmärk on, et järgmine tudeng saaks sama asja uuesti ehitada.
 
 ## Põhikomponendid
-- Mikrokontroller: _[nt Arduino Uno rev3 / ESP32 / muu]_  
-- Toiteplokk / aku: _[pinge, vool]_  
-- Mootor / servo / aktuaatorid: _[täpne mudel]_  
-- Sensorid: _[anduri tüüp ja mudel]_  
-- Draiverplaadid / moodulid: _[L298N, MOSFET board, jms]_  
-- Kinnitused ja mehhaanika: _[3D prinditud detailid, link STL-failile]_  
-- Kaablid, kruvid, prototüüplaud jne.
+- Mikrokontroller: Arduino UNO R4 WiFi (ühilduv kloon, USB-C)
+- Toiteplokk / aku: 5 V USB kaudu arvutist; varuks 4×AA patareihoidik (4,8–6 V) servo eraldi toiteks
+- Mootor / servo / aktuaatorid: servo Hitec HS-322HD
+- Sensorid: HC-SR04 ultraheli-kaugusandur (40 kHz, mõõteulatus umbes 2–400 cm)
+- Draiverplaadid / moodulid: TinkerKit sensorkilp (toob viigud 3-viiguliste pesadena välja)
+- Kinnitused ja mehhaanika: andur kinnitatakse servo hoovale teibi, kuumliimi või kummipaelaga; 3D-prinditud detaile praegu ei ole
+- Kaablid, kruvid, prototüüplaud jne: 4 juhet andurile, USB-C andmekaabel
+
+## Tarkvara ja tööriistad
+- Arduino IDE koos paketiga "Arduino UNO R4 Boards"
+- Brauser Chrome või Edge radarivaate jaoks (vajab jadapordi tuge)
+- Multimeeter sensorkilbi pesade viigujärjekorra kontrollimiseks
 
 ## Lingid / allikad
-- [komponent/mudel] – _link poodi või tootelehele_
-- [komponent/mudel] – _link_
-- [komponent/mudel] – _link_
+- Arduino UNO R4 WiFi – _link lisada_
+- TinkerKit sensorkilp – _link lisada_
+- HC-SR04 – _link lisada_
+- Hitec HS-322HD – _link lisada_
 
 > Kui kasutasite ise disainitud 3D detaile, lisage STL-failid siia samasse kataloogi.
 > Kui tegite Fusion360 / FreeCAD mudeli, lisage ka lähtefail (.f3d, .step jne).
