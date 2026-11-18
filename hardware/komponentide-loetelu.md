@@ -14,7 +14,7 @@ Eesmärk on, et järgmine tudeng saaks sama asja uuesti ehitada.
 ## Tarkvara ja tööriistad
 - Arduino IDE koos paketiga "Arduino UNO R4 Boards"
 - Brauser Chrome või Edge radarivaate jaoks (vajab jadapordi tuge)
-- Multimeeter sensorkilbi pesade viigujärjekorra kontrollimiseks
+- Multimeeter toitepinge kontrollimiseks
 
 ## Lingid / allikad
 - Arduino UNO R4 WiFi – _link lisada_

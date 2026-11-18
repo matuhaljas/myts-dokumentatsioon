@@ -64,20 +64,22 @@ Täpsem loetelu on failis [`hardware/komponentide-loetelu.md`](../hardware/kompo
 
 Skeemi pilt (`hardware/wiring-diagram.png`) on veel tegemata. Ühendused tekstina:
 
-| Osa | Sensorkilbi pesa | Arduino viik |
+Kõik juhtmed lähevad sensorkilbi mustadesse läbivatesse pesadesse, mitte 3-viigulistesse TinkerKiti pesadesse.
+
+| Osa | Juhe | Arduino viik (must pesa) |
 |---|---|---|
-| Servo signaal | O3 | D6 |
-| HC-SR04 Trig | O2 (signaaliviik) | D9 |
-| HC-SR04 Echo | O1 (signaaliviik) | D10 |
-| HC-SR04 VCC | O2 või O1 (5V viik) | 5V |
-| HC-SR04 GND | O2 või O1 (GND viik) | GND |
+| Servo signaal | kollane / oranž | D6 |
+| Servo toide | punane | 5V |
+| Servo maandus | must / pruun | GND |
+| HC-SR04 Trig | | D9 |
+| HC-SR04 Echo | | D10 |
+| HC-SR04 VCC | | 5V |
+| HC-SR04 GND | | GND |
 
-- Sensorkilbi oranžid pesad on väljundid O0–O5, valged sisendid I0–I5.
-- Väljundpesade vastavus Arduino viikudele: O0 = D11, O1 = D10, O2 = D9, O3 = D6, O4 = D5, O5 = D3. Sisendid I0–I5 vastavad viikudele A0–A5.
-- Kilbil on ka mustad läbivad pesad, nii et anduri neli juhet võib ühendada ka otse viikudesse 5V, GND, D9 ja D10.
-- Toide tuleb USB kaudu arvutist; servo ja andur saavad 5 V sensorkilbi pesadest. GND on kõigil ühine.
+- Toide tuleb USB kaudu arvutist. GND on kõigil ühine.
+- Sensorkilbi oranžid pesad on väljundid O0–O5 (O0 = D11, O1 = D10, O2 = D9, O3 = D6, O4 = D5, O5 = D3), valged sisendid I0–I5 (A0–A5). Me neid ei kasuta.
 
-**Kontrollida enne toite ühendamist:** 3-viigulise pesa viikude järjekord (signaal, 5V, GND) tuleb multimeetriga või kilbi tagaküljelt üle vaadata. Servo pistik läheb pessa mõlemat pidi ja anduri vale toitepolaarsus võib selle rikkuda.
+**Miks mitte TinkerKiti pesad:** TinkerKiti 3-viigulise pesa viikude järjekord ei sobi tavalise servo pistikuga. Testis põrises servo pesas O3, aga ei pöördunud. Otse D6, 5V ja GND külge ühendatuna töötas servo kohe.
 
 **Servo toide:** HS-322HD võtab liikudes paarsada mA ja kinni jäädes kuni umbes 0,8 A. Kui plaat USB toitel taaskäivitub või servo tõmbleb, tuleb servole anda eraldi toide patareidest (4×AA) ja ühendada patareide miinus Arduino GND-ga.
 
@@ -129,7 +131,7 @@ Heli läbib 1 cm edasi-tagasi umbes 58 mikrosekundiga, sellest tuleb kauguse arv
 
 1. Paigalda Arduino IDE ja lisa Boards Manageris "Arduino UNO R4 Boards". Vali plaadiks "Arduino UNO R4 WiFi".
 2. Pane sensorkilp Arduino peale.
-3. Kontrolli pesade viigujärjekorda ja ühenda andur ning servo tabeli järgi (USB lahti).
+3. Ühenda andur ja servo tabeli järgi mustadesse läbivatesse pesadesse (USB lahti).
 4. Laadi kood plaadile. Servo peab hakkama edasi-tagasi pühkima.
 5. Ava Serial Monitor kiirusel 115200. Read `nurk,kaugus` peavad muutuma, kui käsi anduri ette panna.
 6. Sulge Serial Monitor, muidu jääb port hõivatuks.
@@ -160,6 +162,8 @@ Hinnanguline ehitusaeg on 2–3 tundi.
 | Pilt on peegelpildis | andur on servol tagurpidi |
 | Täpid hüplevad | pind peegeldab heli halvasti |
 | Arvuti ei näe plaati | USB-C kaabel on ainult laadimiseks |
+| Servo põriseb, aga ei pöördu | servo on TinkerKiti pesas, viikude järjekord ei sobi; ühenda otse D6, 5V ja GND külge |
+| Serial Monitoris on ainult `?` märgid | Serial Monitori kiirus pole 115200 |
 
 ---
 
@@ -172,7 +176,7 @@ Hinnanguline ehitusaeg on 2–3 tundi.
 
 ## 12. Tegemata
 
-- [ ] Sensorkilbi pesade viigujärjekorra kontroll
+- [x] Sensorkilbi pesade viigujärjekorra kontroll (ei sobi servoga, kasutame musti pesi)
 - [ ] Seadme kokkupanek
 - [ ] Koodi kompileerimine ja testimine riistvaraga
 - [ ] Servo toite katsetamine USB pealt
