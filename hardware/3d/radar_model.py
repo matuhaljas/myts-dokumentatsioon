@@ -126,7 +126,7 @@ def mast():
     return m
 
 
-def dish():
+def antenn():
     def band(r_in, r_out):
         ring = CrossSection.circle(r_out, 512) - CrossSection.circle(r_in, 512)
         return Manifold.extrude(ring.translate((0, DISH_R)), DISH_H)
@@ -143,7 +143,8 @@ def dish():
 
     # HC-SR04 hoidik: kaks soonega rööbast, plaat lükatakse ülevalt sisse
     gw, lip = PCB[0] / 2 + TOL, 21.5
-    y_back, y_slot = 6.0, 6.0 + 2.0
+    y_back = 6.0
+    y_slot = y_back + 2.0
     y_front = y_slot + PCB[2] + 0.5
     top = SENSOR_Z + PCB[1]
     for s in (1, -1):
@@ -165,7 +166,7 @@ def to_trimesh(m):
     return trimesh.Trimesh(mesh.vert_properties[:, :3], mesh.tri_verts)
 
 
-PARTS = {"korpus": korpus, "kaas": kaas, "mast": mast, "antenn": dish}
+PARTS = {"korpus": korpus, "kaas": kaas, "mast": mast, "antenn": antenn}
 PRINT_FLIP = {"kaas"}   # kaas prinditakse tagurpidi (pealispind alusel)
 
 if __name__ == "__main__":
