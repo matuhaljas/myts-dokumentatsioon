@@ -8,7 +8,7 @@ Eesmärk on, et järgmine tudeng saaks sama asja uuesti ehitada.
 - Mootor / servo / aktuaatorid: servo Hitec HS-322HD
 - Sensorid: HC-SR04 ultraheli-kaugusandur (40 kHz, mõõteulatus umbes 2–400 cm)
 - Draiverplaadid / moodulid: TinkerKit sensorkilp (toob viigud 3-viiguliste pesadena välja)
-- Kinnitused ja mehhaanika: andur kinnitatakse servo hoovale teibi, kuumliimi või kummipaelaga; 3D-prinditud detaile praegu ei ole
+- Kinnitused ja mehhaanika: 3D-prinditud korpus, kaas, mast ja antenn (vt [`3d/README.md`](3d/README.md)); 4 isekeermestavat M3 kruvi Arduino jaoks, servo enda kruvid
 - Kaablid, kruvid, prototüüplaud jne: 4 juhet andurile, USB-C andmekaabel
 
 ## Tarkvara ja tööriistad
